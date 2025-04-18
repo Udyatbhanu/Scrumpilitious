@@ -1,4 +1,4 @@
-package com.bhanu.baliyar.scrumpilitious.ui.theme
+package com.bhanu.baliyar.scrumpilitious.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,6 +1,5 @@
-package com.bhanu.baliyar.scrumpilitious.ui.theme
+package com.bhanu.baliyar.scrumpilitious.presentation.theme
 
-import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
