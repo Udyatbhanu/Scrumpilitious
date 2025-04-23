@@ -44,10 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.bhanu.baliyar.scrumpilitious.R
+import com.bhanu.baliyar.scrumpilitious.core.AppLocalSpacing
 import com.bhanu.baliyar.scrumpilitious.core.LocalNavProvider
 import com.bhanu.baliyar.scrumpilitious.core.LocalSpacing
 import com.bhanu.baliyar.scrumpilitious.core.navigation.ScreenRoute
 import com.bhanu.baliyar.scrumpilitious.data.mdoels.Recipe
+import com.bhanu.baliyar.scrumpilitious.presentation.components.RecipeCard
 
 
 sealed class HomeScreenState {
@@ -79,14 +81,11 @@ fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
             )
         }
     }
-
-
 }
 
 @Composable
 fun RecipesView(recipes: List<Recipe>) {
     var query by remember { mutableStateOf("") }
-    val localSpacing = LocalSpacing.current
     Column {
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -105,7 +104,7 @@ fun RecipesView(recipes: List<Recipe>) {
 
             }
         )
-        Spacer(modifier = Modifier.height(localSpacing.large))
+        Spacer(modifier = Modifier.height(AppLocalSpacing.large))
         RecipesGrid(recipes)
     }
 }
@@ -121,42 +120,6 @@ fun RecipesGrid(recipes: List<Recipe>) {
     ) {
         items(recipes) { recipe ->
             RecipeCard(recipe)
-        }
-    }
-}
-
-@Composable
-fun RecipeCard(recipe: Recipe) {
-    val navController = LocalNavProvider.current
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .height(200.dp)
-            .clickable {
-                navController.currentBackStackEntry?.savedStateHandle?.set("recipe", recipe)
-                navController.navigate(ScreenRoute.Details.route)
-            },
-        shape = RoundedCornerShape(7.dp)
-    ) {
-        Column {
-            AsyncImage(
-                model = recipe.image,
-                contentDescription = "Recipe",
-                contentScale = ContentScale.Crop,
-                alignment = Alignment.Center,
-                placeholder = painterResource(R.drawable.baseline_downloading_24),
-                error = painterResource(R.drawable.error),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .clip(RoundedCornerShape(topStart = 7.dp, topEnd = 7.dp))
-            )
-            Text(
-                modifier = Modifier.padding(4.dp),
-                text = recipe.name,
-                style = MaterialTheme.typography.titleSmall
-            )
         }
     }
 }

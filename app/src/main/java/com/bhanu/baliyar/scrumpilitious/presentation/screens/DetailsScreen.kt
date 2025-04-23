@@ -9,5 +9,4 @@ fun DetailsScreen(recipe: Recipe?) {
     if (recipe != null) {
         Text(text = "Details Screen for ${recipe.name}")
     }
-
 }

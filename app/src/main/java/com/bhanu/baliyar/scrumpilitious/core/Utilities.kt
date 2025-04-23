@@ -20,6 +20,9 @@ val LocalNavProvider = compositionLocalOf<NavHostController> { error("NavHost no
 val AppLocalSpacing: AppSpacing
     @Composable get() = LocalSpacing.current
 
+val AppLocalNavController: NavHostController
+    @Composable get() = LocalNavProvider.current
+
 @Composable
 fun rememberSpacing(): AppSpacing {
     val small = dimensionResource(R.dimen.spacing_small)
