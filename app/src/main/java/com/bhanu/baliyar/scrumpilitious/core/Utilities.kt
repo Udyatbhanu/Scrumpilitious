@@ -29,5 +29,4 @@ fun AppProvider(content: @Composable () -> Unit) {
     ) {
         content()
     }
-
 }

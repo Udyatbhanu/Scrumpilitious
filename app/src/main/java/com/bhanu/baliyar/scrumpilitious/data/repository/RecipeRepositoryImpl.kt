@@ -19,6 +19,14 @@ class RecipeRepositoryImpl @Inject constructor(private val api: RecipeApi) : Rec
         return safeApiCall(coroutineDispatcher = Dispatchers.IO) {
             api.getRecipes()
         }
+
+
+//        safeApiCall {
+//
+//            onApiCall : {}
+//            onSuccess : a{}
+//            onError:{}
+//        }
     }
 
     suspend fun <T> safeApiCall(
