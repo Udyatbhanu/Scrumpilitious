@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId = "com.bhanu.baliyar.scrumpilitious"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 

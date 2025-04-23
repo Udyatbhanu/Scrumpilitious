@@ -7,6 +7,10 @@ import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
+
+
+
+
 suspend fun <T> safeApiCall(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
     apiCall: suspend () -> Response<T>
@@ -15,12 +19,9 @@ suspend fun <T> safeApiCall(
         try {
             val response = apiCall()
             if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null) {
-                    ResultWrapper.Success(body)
-                } else {
-                    ResultWrapper.Error("Response body was null")
-                }
+                response.body()?.let{
+                    ResultWrapper.Success(it)
+                } ?: ResultWrapper.Error("Response body was null")
             } else {
                 val errorMessage = response.errorBody()?.string().orEmpty()
                 ResultWrapper.Error("API Error: ${response.code()} $errorMessage")
