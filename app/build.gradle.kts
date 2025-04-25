@@ -65,6 +65,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
 
+    // For Work Manager
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+
 
     // Retrofit core
     implementation(libs.retrofit)
@@ -82,8 +86,12 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.androidx.hilt.compiler)
 
+    testImplementation(libs.turbine)
+
     testImplementation(libs.mockk) // Or latest
     testImplementation(libs.kotlinx.coroutines.test)
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

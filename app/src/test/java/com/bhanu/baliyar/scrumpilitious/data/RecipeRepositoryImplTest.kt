@@ -1,15 +1,15 @@
 package com.bhanu.baliyar.scrumpilitious.data
 
+import app.cash.turbine.test
 import com.bhanu.baliyar.scrumpilitious.core.ResultWrapper
 import com.bhanu.baliyar.scrumpilitious.core.dispatchers.DispatcherProvider
 import com.bhanu.baliyar.scrumpilitious.data.repository.RecipeRepository
 import com.bhanu.baliyar.scrumpilitious.data.repository.RecipeRepositoryImpl
-import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -17,15 +17,13 @@ import org.junit.Test
 class RecipeRepositoryImplTest {
 
     private lateinit var repository: RecipeRepository
-    private lateinit var testDispatcher: TestDispatcher
     private lateinit var dispatcherProvider: DispatcherProvider
     private lateinit var testScheduler: TestCoroutineScheduler
-
 
     @Before
     fun setUp() {
         testScheduler = TestCoroutineScheduler()
-        testDispatcher = StandardTestDispatcher(testScheduler)
+        val testDispatcher = StandardTestDispatcher(testScheduler)
         dispatcherProvider = object : DispatcherProvider {
             override val io = testDispatcher
             override val default = testDispatcher
@@ -35,31 +33,38 @@ class RecipeRepositoryImplTest {
     }
 
     @Test
-    fun `getRecipes returns Success when API call succeeds`() = runTest(testScheduler)  {
-        // Arrange
+    fun `getRecipes emits Success when API call succeeds`() = runTest(testScheduler) {
         val fakeApi = FakeRecipeApi(shouldFail = false)
         repository = RecipeRepositoryImpl(dispatcherProvider, fakeApi)
 
-        // Act
-        val result = repository.getRecipes()
+        repository.getRecipes().test {
+            // Skip the loading emission
+            val loading = awaitItem()
+            assertTrue(loading is ResultWrapper.Loading)
 
-        // Assert
-        assert(result is ResultWrapper.Success)
-        val recipes = (result as ResultWrapper.Success).response.recipes
-        assert(recipes.isNotEmpty())
-        assertEquals("Fake Dish", recipes.first().name)
+            // Then expect success
+            val result = awaitItem()
+            assertTrue(result is ResultWrapper.Success)
+
+            val recipes = (result as ResultWrapper.Success).response.recipes
+            assertEquals("Fake Dish", recipes.first().name)
+
+            awaitComplete()
+        }
     }
 
     @Test
-    fun `getRecipes returns Error when API call fails`() = runTest(testScheduler) {
-        // Arrange
+    fun `getRecipes emits Error when API call fails`() = runTest(testScheduler) {
         val fakeApi = FakeRecipeApi(shouldFail = true)
         repository = RecipeRepositoryImpl(dispatcherProvider, fakeApi)
 
-        // Act
-        val result = repository.getRecipes()
+        repository.getRecipes().test {
+            val loading = awaitItem()
+            assertTrue(loading is ResultWrapper.Loading)
 
-        // Assert
-        assert(result is ResultWrapper.Error)
+            val result = awaitItem()
+            assertTrue(result is ResultWrapper.Error)
+            awaitComplete()
+        }
     }
 }

@@ -5,11 +5,8 @@ import com.bhanu.baliyar.scrumpilitious.core.dispatchers.DispatcherProvider
 import com.bhanu.baliyar.scrumpilitious.core.safeApiCall
 import com.bhanu.baliyar.scrumpilitious.data.mdoels.RecipesResponse
 import com.bhanu.baliyar.scrumpilitious.data.network.RecipeApi
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import retrofit2.Response
 
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 
@@ -18,7 +15,7 @@ class RecipeRepositoryImpl @Inject constructor(
     private val api: RecipeApi
 ) : RecipeRepository {
 
-    override suspend fun getRecipes(): ResultWrapper<RecipesResponse> {
+    override  fun getRecipes(): Flow<ResultWrapper<RecipesResponse>> {
         return safeApiCall(coroutineDispatcher = dispatcherProvider.io) {
             api.getRecipes()
         }

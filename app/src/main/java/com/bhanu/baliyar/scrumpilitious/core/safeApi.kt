@@ -2,38 +2,40 @@ package com.bhanu.baliyar.scrumpilitious.core
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 import retrofit2.Response
 import java.io.IOException
 
 
-
-
-
-suspend fun <T> safeApiCall(
+fun <T> safeApiCall(
     coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO,
     apiCall: suspend () -> Response<T>
-): ResultWrapper<T> {
-    return withContext(coroutineDispatcher) {
+): Flow<ResultWrapper<T>> {
+    return flow {
+        emit(ResultWrapper.Loading)
         try {
             val response = apiCall()
             if (response.isSuccessful) {
-                response.body()?.let{
-                    ResultWrapper.Success(it)
-                } ?: ResultWrapper.Error("Response body was null")
+                response.body()?.let {
+                    emit(ResultWrapper.Success(it))
+                } ?: emit(ResultWrapper.Error("Response body was null"))
             } else {
                 val errorMessage = response.errorBody()?.string().orEmpty()
-                ResultWrapper.Error("API Error: ${response.code()} $errorMessage")
+                emit(ResultWrapper.Error("API Error: ${response.code()} $errorMessage"))
             }
         } catch (e: IOException) {
-            ResultWrapper.Error("Network error: ${e.localizedMessage}")
+            emit(ResultWrapper.Error("Network error: ${e.localizedMessage}"))
         } catch (e: HttpException) {
-            ResultWrapper.Error("HTTP error: ${e.code()} ${e.message()}")
+            emit(ResultWrapper.Error("HTTP error: ${e.code()} ${e.message()}"))
         } catch (e: Exception) {
-            ResultWrapper.Error("Unexpected error: ${e.localizedMessage}")
+            emit(ResultWrapper.Error("Unexpected error: ${e.localizedMessage}"))
         }
-    }
+    }.flowOn(coroutineDispatcher)
+
+
 }
 
 
