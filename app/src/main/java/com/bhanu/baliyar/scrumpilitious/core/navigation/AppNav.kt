@@ -1,5 +1,6 @@
 package com.bhanu.baliyar.scrumpilitious.core.navigation
 
+import androidx.annotation.RequiresPermission
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +14,7 @@ sealed class ScreenRoute(val route: String) {
     object RecipeHome : ScreenRoute("home")
     object Details : ScreenRoute("details")
 }
-
+@RequiresPermission(android.Manifest.permission.POST_NOTIFICATIONS)
 @Composable
 fun AppNav() {
     val navController = LocalNavProvider.current

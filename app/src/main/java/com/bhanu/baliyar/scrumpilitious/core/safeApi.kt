@@ -34,8 +34,6 @@ fun <T> safeApiCall(
             emit(ResultWrapper.Error("Unexpected error: ${e.localizedMessage}"))
         }
     }.flowOn(coroutineDispatcher)
-
-
 }
 
 
