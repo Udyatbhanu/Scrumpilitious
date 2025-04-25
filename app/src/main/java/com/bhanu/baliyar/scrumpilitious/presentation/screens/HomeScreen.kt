@@ -58,12 +58,13 @@ sealed class HomeScreenState {
     object Loading : HomeScreenState()
 }
 
+@androidx.annotation.RequiresPermission(android.Manifest.permission.POST_NOTIFICATIONS)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(viewModel: HomeScreenViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(Unit){
         viewModel.fetchRecipes()
     }
 
