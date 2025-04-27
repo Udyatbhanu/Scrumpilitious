@@ -15,10 +15,10 @@ class RecipeRepositoryImpl @Inject constructor(
     private val api: RecipeApi
 ) : RecipeRepository {
 
-    override  fun getRecipes(): Flow<ResultWrapper<RecipesResponse>> {
-        return safeApiCall(coroutineDispatcher = dispatcherProvider.io) {
+    override fun getRecipes(): Flow<ResultWrapper<RecipesResponse>> {
+        return safeApiCall(coroutineDispatcher = dispatcherProvider.io, apiCall = {
             api.getRecipes()
-        }
+        })
     }
 }
 
