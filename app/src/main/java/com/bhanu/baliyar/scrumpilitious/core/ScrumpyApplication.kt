@@ -10,7 +10,6 @@ import com.bhanu.baliyar.scrumpilitious.core.notifications.WorkerFactoryEntryPoi
 import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.HiltAndroidApp
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 @HiltAndroidApp
 class ScrumpyApplication : Application(), Configuration.Provider {

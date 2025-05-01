@@ -37,6 +37,9 @@ turbine = "1.0.0"
 # WorkManager
 workRuntimeKtx = "2.10.1"
 
+# Datastore
+datastorePreferences = "1.1.5"
+
 # Room
 room = "2.6.1"
 
@@ -78,6 +81,10 @@ coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Datastore
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+
 
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
